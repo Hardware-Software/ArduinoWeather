@@ -1,5 +1,8 @@
 import jssc.*;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.util.ArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
@@ -7,13 +10,19 @@ import java.util.concurrent.LinkedBlockingQueue;
  */
 
 public class SerialComm implements SerialPortEventListener {
+    ArrayList<BufferReadyEvent> listenerList;
     SerialPort port;
     LinkedBlockingQueue buffer;
     public boolean RTS = false;
-    static byte x = 'F';
+    char mostRecentRequest;
     SerialComm(String comPort, LinkedBlockingQueue lq){
+        listenerList = new ArrayList<>();
         connect(comPort);
         buffer = lq;
+    }
+
+    public void addListener(BufferReadyEvent ev){
+        listenerList.add(ev);
     }
     public void connect(String comPort){
         // List the available COM ports.
@@ -32,13 +41,14 @@ public class SerialComm implements SerialPortEventListener {
             System.out.println("Error: Serial port is not available.");
         }
     }
-    public boolean send(char Message){
+    public boolean send(char dataRequested){
         if(RTS){
             try {
-                port.writeByte((byte) Message);
+                port.writeByte((byte) dataRequested);
             }catch(SerialPortException exc){
                 exc.printStackTrace();
             }
+            mostRecentRequest = dataRequested;
             return true;
         }else {
             return false;
@@ -48,21 +58,49 @@ public class SerialComm implements SerialPortEventListener {
         if (e.isRXCHAR() && e.getEventValue() > 0) {
             try {
                 System.out.println("Received Response");
-                byte[] input = port.readBytes();
+                byte[] input = new byte[1];
                 if(!RTS){
+                    try{
+                    input = port.readBytes(3,200);
+                    }catch(SerialPortTimeoutException exc){
+                        exc.printStackTrace();
+                    }
                     StringBuilder s = new StringBuilder();
                     for(byte b : input){
                         s.append((char)b);
                     }
-                    buffer.add(s.toString());
-                    RTS = true;
+                    if(s.toString().equals("RTS")){
+                        RTS = true;
+                    }
                 }else {
-                    buffer.add(input);
+                    try {
+                        input = port.readBytes(12, 200);
+                    }catch(SerialPortTimeoutException spte){
+                        spte.printStackTrace();
+                    }
+                    ByteBuffer temperature = ByteBuffer.wrap(input, 0, 4);
+                    ByteBuffer humidity = ByteBuffer.wrap(input, 4, 4);
+                    ByteBuffer pressure = ByteBuffer.wrap(input, 8, 4);
+                    temperature.order(ByteOrder.LITTLE_ENDIAN);
+                    pressure.order(ByteOrder.LITTLE_ENDIAN);
+                    humidity.order(ByteOrder.LITTLE_ENDIAN);
+                    float tp = temperature.getFloat();
+                    int pr = pressure.getInt();
+                    float hm = humidity.getFloat();
+                    buffer.add(new Packet(tp,hm,pr));
+                    for(BufferReadyEvent evnt : listenerList){
+                        evnt.bufferReady(mostRecentRequest);
+                    }
+                    System.out.println(tp + "C " + hm + "% RH " + (pr / 100.0F) + " hPa");
                 }
+
             } catch (SerialPortException ex) {
                 System.out.println("Serial Port Error");
             }
         }
 
     }
+}
+interface BufferReadyEvent {
+    void bufferReady(char type);
 }
