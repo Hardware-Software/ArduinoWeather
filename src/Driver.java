@@ -32,19 +32,16 @@ public class Driver {
         for (; ; ) {
             if (!buffer.isEmpty()) {
                 message = (byte[]) buffer.remove();
-                ByteBuffer data1 = ByteBuffer.wrap(message,0,2);
-                ByteBuffer data2 = ByteBuffer.wrap(message,2,2);
-                ByteBuffer data3 = ByteBuffer.wrap(message,4,2);
-                ByteBuffer data4 = ByteBuffer.wrap(message,6,2);
-                data1.order(ByteOrder.LITTLE_ENDIAN);
-                data2.order(ByteOrder.LITTLE_ENDIAN);
-                data3.order(ByteOrder.LITTLE_ENDIAN);
-                data4.order(ByteOrder.LITTLE_ENDIAN);
-                short test1 = data1.getShort();
-                short test2 = data2.getShort();
-                short test3 = data3.getShort();
-                short test4 = data4.getShort();
-                System.out.println(test1 + " " + test2 + " " + test3 + " " + test4);
+                ByteBuffer temperature = ByteBuffer.wrap(message,0,4);
+                ByteBuffer pressure = ByteBuffer.wrap(message,4,4);
+                ByteBuffer humidity = ByteBuffer.wrap(message,8,4);
+                temperature.order(ByteOrder.LITTLE_ENDIAN);
+                pressure.order(ByteOrder.LITTLE_ENDIAN);
+                humidity.order(ByteOrder.LITTLE_ENDIAN);
+                float tp = temperature.getFloat();
+                float hm = pressure.getFloat();
+                int pr = humidity.getInt();
+                System.out.println(tp + "C " + hm + "% RH " + (pr/100.0F) + " hPa");
             }
             try {
                 Thread.sleep(200);
