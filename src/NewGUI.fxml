@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Text?>
+
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
+  <columnConstraints>
+    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+  </columnConstraints>
+  <rowConstraints>
+      <RowConstraints maxHeight="194.5" minHeight="10.0" percentHeight="5.0" prefHeight="24.5" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="194.5" minHeight="10.0" percentHeight="5.0" prefHeight="88.5" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="194.5" minHeight="10.0" percentHeight="42.5" prefHeight="125.0" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="346.0" minHeight="10.0" percentHeight="5.0" prefHeight="36.0" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="359.0" minHeight="10.0" percentHeight="42.5" prefHeight="204.0" vgrow="SOMETIMES" />
+  </rowConstraints>
+   <children>
+      <LineChart id="TemperatureChart" fx:id="TemperatureChart" GridPane.rowIndex="2">
+        <xAxis>
+          <CategoryAxis id="TempXAxis" side="BOTTOM" />
+        </xAxis>
+        <yAxis>
+          <NumberAxis id="TempYAxis" side="LEFT" />
+        </yAxis>
+      </LineChart>
+      <LineChart id="HumidChart" GridPane.columnIndex="1" GridPane.rowIndex="2">
+        <xAxis>
+          <CategoryAxis id="HumidXAxis" side="BOTTOM" />
+        </xAxis>
+        <yAxis>
+          <NumberAxis id="HumidYAxis" side="LEFT" />
+        </yAxis>
+      </LineChart>
+      <LineChart id="PressureChart" GridPane.rowIndex="4">
+        <xAxis>
+          <CategoryAxis id="PressureXAxis" side="BOTTOM" />
+        </xAxis>
+        <yAxis>
+          <NumberAxis id="PressureYAxis" side="LEFT" />
+        </yAxis>
+      </LineChart>
+      <LineChart id="LightChart" GridPane.columnIndex="1" GridPane.rowIndex="4">
+        <xAxis>
+          <CategoryAxis id="LightXAxis" side="BOTTOM" />
+        </xAxis>
+        <yAxis>
+          <NumberAxis id="LightYAxis" side="LEFT" />
+        </yAxis>
+      </LineChart>
+      <ToolBar prefHeight="40.0" prefWidth="200.0" GridPane.rowIndex="1">
+        <items>
+          <Button fx:id="tempButton" mnemonicParsing="false" text="Temperature" />
+            <Text fx:id="tempText" strokeType="OUTSIDE" strokeWidth="0.0" />
+        </items>
+      </ToolBar>
+      <ToolBar prefHeight="40.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+        <items>
+          <Button fx:id="humidButton" mnemonicParsing="false" text="Humid" />
+            <Text fx:id="humidText" strokeType="OUTSIDE" strokeWidth="0.0" />
+        </items>
+      </ToolBar>
+      <ToolBar prefHeight="40.0" prefWidth="200.0" GridPane.rowIndex="3">
+        <items>
+          <Button fx:id="pressButton" mnemonicParsing="false" text="Pressure" />
+            <Text fx:id="pressText" strokeType="OUTSIDE" strokeWidth="0.0" />
+        </items>
+      </ToolBar>
+      <ToolBar prefHeight="40.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+        <items>
+          <Button fx:id="lightButton" mnemonicParsing="false" text="Daytime" />
+            <Text fx:id="lightText" strokeType="OUTSIDE" strokeWidth="0.0" />
+        </items>
+      </ToolBar>
+      <ToolBar prefHeight="40.0" prefWidth="200.0" GridPane.columnSpan="2147483647">
+         <items>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Connected" textOrigin="CENTER" />
+         </items>
+      </ToolBar>
+   </children>
+</GridPane>

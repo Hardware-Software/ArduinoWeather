@@ -1,12 +1,10 @@
-package sample;
-
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public class Main extends Application {
+public class GUIMain extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -17,6 +15,6 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
-        Application.launch(Main.class, (java.lang.String[])null);;
+        Application.launch(GUIMain.class, (java.lang.String[])null);;
     }
 }
