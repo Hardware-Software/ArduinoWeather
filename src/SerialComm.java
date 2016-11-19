@@ -31,7 +31,7 @@ public class SerialComm implements SerialPortEventListener {
         for (String port : list) {
             System.out.println(port);
         }
-        port = new SerialPort("COM3");
+        port = new SerialPort(comPort);
         try {
             port.openPort();
             port.setParams(SerialPort.BAUDRATE_9600, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);

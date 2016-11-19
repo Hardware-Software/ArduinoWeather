@@ -65,10 +65,7 @@ public class TestNewMain extends Application implements BufferReadyEvent {
         press.setOnAction(e -> getPress(pressResults));
         light.setOnAction(e -> getLight(lightResults));
         humid.setOnAction(e -> getHumid(humidResults));
-        all.setOnAction(e -> { getTemp(tempResults);
-            getPress(pressResults);
-            getLight(lightResults);
-            getHumid(humidResults); });
+        all.setOnAction(e -> getAll());
 
         // Create Window and show it
         primaryStage.setScene(new Scene(grid, 270, 225));
@@ -90,6 +87,8 @@ public class TestNewMain extends Application implements BufferReadyEvent {
     private void getHumid(Text humidResults){
         serialPort.send('H');
     }
+
+    private void getAll() {serialPort.send('A');}
     @Override
     public void bufferReady(char request){
         Packet data = new Packet(0,0,0);
@@ -111,6 +110,12 @@ public class TestNewMain extends Application implements BufferReadyEvent {
                 case 'H':{
                     humidResults.setText("Humid " + data.humidity + "RH");
                     break;
+                }
+                case 'A': {
+                    humidResults.setText("Humid " + data.humidity + "RH");
+                    lightResults.setText("Daytime/Nighttime");
+                    pressResults.setText("Press " + data.pressure+ "Pa");
+                    tempResults.setText("Temp " + data.temperature + "C");
                 }
             }
         }
