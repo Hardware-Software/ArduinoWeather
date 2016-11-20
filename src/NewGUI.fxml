@@ -81,7 +81,7 @@
       </ToolBar>
       <ToolBar prefHeight="40.0" prefWidth="200.0" GridPane.columnSpan="2147483647">
          <items>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Connected" textOrigin="CENTER" />
+            <Text fx:id="connectText" strokeType="OUTSIDE" strokeWidth="0.0" text="Not Connected" textOrigin="CENTER" fill="firebrick"/>
          </items>
       </ToolBar>
    </children>
