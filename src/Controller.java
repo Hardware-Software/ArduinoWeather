@@ -10,6 +10,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 
 import javax.swing.*;
@@ -17,13 +18,15 @@ import javax.swing.*;
 public class Controller implements  Initializable, BufferReadyEvent {
 
     @FXML
-    private Button tempButton;
+    private Button connectButton;
     @FXML
-    private Button humidButton;
+    private Button graphItButton;
     @FXML
-    private Button pressButton;
+    private Button RateButton;
+
     @FXML
-    private Button lightButton;
+    private TextField RateField;
+
     @FXML
     private Text tempText;
     @FXML
@@ -48,33 +51,6 @@ public class Controller implements  Initializable, BufferReadyEvent {
         Timer tm = new Timer(1000, timer);
         tm.setInitialDelay(3000);
         tm.start();
-        tempButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                port.send('T');
-            }
-        });
-
-        humidButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                port.send('H');
-            }
-        });
-
-        pressButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                port.send('P');
-            }
-        });
-
-        lightButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                port.send('L');
-            }
-        });
     }
 
     @Override
