@@ -32,9 +32,11 @@ Adafruit_BME280 bme; // I2C
 //Adafruit_BME280 bme(BME_CS); // hardware SPI
 //Adafruit_BME280 bme(BME_CS, BME_MOSI, BME_MISO,  BME_SCK);
 struct datarec {
-  float temperature;
-  float humidity;
-  unsigned long pressure;
+  int temperature;
+  int pressure;
+  byte humidity;
+  byte light;
+  int timeStamp;
 };
 typedef struct datarec DataRecord;
 int data;
@@ -68,5 +70,13 @@ void serialEvent() {
     receivedChar = Serial.read();
     messageArrived = true;
   }
+}
+
+DataRecord measure() {
+  DataRecord dr;
+  dr.temperature = bme.readTemperature();
+  dr.humidity = bme.readHumidity();
+  dr.pressure = bme.readPressure();
+  return dr;
 }
 
