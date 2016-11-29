@@ -3,10 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="c389b59c-84bc-48ba-8fd0-0f2d7cc18d20" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Controller.java" afterPath="$PROJECT_DIR$/src/Controller.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/GUIMain.java" afterPath="$PROJECT_DIR$/src/GUIMain.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Main.java" afterPath="$PROJECT_DIR$/src/Main.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/NewGUI2.fxml" afterPath="$PROJECT_DIR$/src/NewGUI2.fxml" />
     </list>
     <ignored path="SerialExperiments.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -739,7 +735,7 @@
       <workItem from="1480222302787" duration="8984000" />
       <workItem from="1480301610745" duration="927000" />
       <workItem from="1480361257356" duration="192000" />
-      <workItem from="1480454220629" duration="7040000" />
+      <workItem from="1480454220629" duration="7085000" />
     </task>
     <task id="LOCAL-00001" summary="Added better serial communication">
       <created>1479511456148</created>
@@ -790,11 +786,18 @@
       <option name="project" value="LOCAL" />
       <updated>1479605711122</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="New Gui with working graphs">
+      <created>1480461371255</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1480461371255</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="50154000" />
+    <option name="totallyTimeSpent" value="50199000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="1908" y="0" width="1944" height="2092" extended-state="0" />
@@ -876,7 +879,8 @@
     <MESSAGE value="Forgot to actually commit the files" />
     <MESSAGE value="GUITooy" />
     <MESSAGE value="My tears. A new GUI" />
-    <option name="LAST_COMMIT_MESSAGE" value="My tears. A new GUI" />
+    <MESSAGE value="New Gui with working graphs" />
+    <option name="LAST_COMMIT_MESSAGE" value="New Gui with working graphs" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
