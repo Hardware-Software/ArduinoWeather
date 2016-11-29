@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
@@ -22,39 +21,37 @@
       <RowConstraints maxHeight="194.5" minHeight="10.0" percentHeight="5.0" prefHeight="88.5" vgrow="SOMETIMES" />
     <RowConstraints maxHeight="194.5" minHeight="10.0" percentHeight="5.0" prefHeight="88.5" vgrow="SOMETIMES" />
       <RowConstraints maxHeight="194.5" minHeight="10.0" percentHeight="5.0" prefHeight="88.5" vgrow="SOMETIMES" />
-      <RowConstraints maxHeight="303.5" minHeight="10.0" percentHeight="42.5" prefHeight="256.0" vgrow="SOMETIMES" />
-      <RowConstraints maxHeight="194.5" minHeight="1.0" percentHeight="5.0" prefHeight="88.5" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="303.5" minHeight="10.0" percentHeight="42.5" prefHeight="293.0" vgrow="SOMETIMES" />
       <RowConstraints maxHeight="359.0" minHeight="10.0" percentHeight="42.5" prefHeight="255.5" vgrow="SOMETIMES" />
-      <RowConstraints maxHeight="359.0" minHeight="10.0" percentHeight="5.0" prefHeight="255.5" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
       <LineChart id="TemperatureChart" fx:id="TemperatureChart" prefHeight="266.0" prefWidth="472.0" GridPane.rowIndex="5">
         <xAxis>
-          <CategoryAxis id="TempXAxis" side="BOTTOM" />
+          <NumberAxis id="TempXAxis" fx:id="TempXAxis" side="BOTTOM" />
         </xAxis>
         <yAxis>
-          <NumberAxis id="TempYAxis" side="LEFT" />
+          <NumberAxis id="TempYAxis" fx:id="TempYAxis" side="LEFT" />
         </yAxis>
       </LineChart>
-      <LineChart id="HumidChart" GridPane.columnIndex="1" GridPane.rowIndex="5">
+       <LineChart id="HumidChart" fx:id="HumidChart" GridPane.columnIndex="1" GridPane.rowIndex="5">
         <xAxis>
-          <CategoryAxis id="HumidXAxis" side="BOTTOM" />
+          <NumberAxis id="HumidXAxis" side="BOTTOM" />
         </xAxis>
         <yAxis>
           <NumberAxis id="HumidYAxis" side="LEFT" />
         </yAxis>
       </LineChart>
-      <LineChart id="PressureChart" GridPane.rowIndex="7">
+      <LineChart id="PressureChart" fx:id="PressureChart" GridPane.rowIndex="6">
         <xAxis>
-          <CategoryAxis id="PressureXAxis" side="BOTTOM" />
+          <NumberAxis id="PressureXAxis" side="BOTTOM" />
         </xAxis>
         <yAxis>
           <NumberAxis id="PressureYAxis" side="LEFT" />
         </yAxis>
       </LineChart>
-      <LineChart id="LightChart" GridPane.columnIndex="1" GridPane.rowIndex="7">
+      <LineChart id="LightChart" fx:id="LightChart" GridPane.columnIndex="1" GridPane.rowIndex="6">
         <xAxis>
-          <CategoryAxis id="LightXAxis" side="BOTTOM" />
+          <NumberAxis id="LightXAxis" side="BOTTOM" />
         </xAxis>
         <yAxis>
           <NumberAxis id="LightYAxis" side="LEFT" />
@@ -63,7 +60,7 @@
       <ToolBar prefHeight="209.0" prefWidth="488.0" GridPane.rowIndex="1">
         <items>
             <Text fx:id="Temperature" strokeType="OUTSIDE" strokeWidth="0.0" text="Temperature :" wrappingWidth="76.0" />
-            <Text fx:id="tempText1" layoutX="10.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" />
+            <Text fx:id="tempText" layoutX="10.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" />
         </items>
       </ToolBar>
       <ToolBar prefHeight="40.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
@@ -94,26 +91,6 @@
         <items>
           <Button fx:id="graphItButton" mnemonicParsing="false" text="Graph Data" />
         </items>
-      </ToolBar>
-      <ToolBar prefHeight="40.0" prefWidth="200.0" GridPane.rowIndex="8">
-         <items>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Pressure" wrappingWidth="74.13671875" />
-         </items>
-      </ToolBar>
-      <ToolBar prefHeight="40.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="8">
-         <items>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Light" wrappingWidth="80.6875" />
-         </items>
-      </ToolBar>
-      <ToolBar maxHeight="28.0" maxWidth="497.0" prefHeight="28.0" prefWidth="497.0" GridPane.rowIndex="6">
-         <items>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Temperature" wrappingWidth="75.5625" />
-         </items>
-      </ToolBar>
-      <ToolBar prefHeight="28.0" prefWidth="504.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
-         <items>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Humidity" wrappingWidth="90.13671875" />
-         </items>
       </ToolBar>
       <ToolBar prefHeight="40.0" prefWidth="200.0" GridPane.columnIndex="1">
         <items>
