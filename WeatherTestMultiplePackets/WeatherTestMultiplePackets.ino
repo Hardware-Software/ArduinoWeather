@@ -64,7 +64,7 @@ void serialEvent() {
     messageArrived = true;
   }
     Serial.write('D');
-    Serial.write(28);
+    Serial.write(8);
     dr.temperature = (int) bme.readTemperature();
     dr.humidity = (byte) bme.readHumidity();
     dr.pressure = (int) (bme.readPressure()/100.0);

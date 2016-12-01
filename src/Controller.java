@@ -1,7 +1,6 @@
 
 import java.awt.event.*;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.concurrent.LinkedBlockingDeque;
@@ -22,8 +21,7 @@ import jssc.SerialPortException;
 
 import javax.swing.*;
 
-public class Controller implements  Initializable, BufferReadyEvent {
-
+public class Controller implements Initializable, BufferReadyEvent {
 
     @FXML
     private Button connectButton;
@@ -72,64 +70,60 @@ public class Controller implements  Initializable, BufferReadyEvent {
     private LinkedBlockingQueue lq;
     private SerialComm port;
     private boolean sentRecently;
+
     @Override
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
 
         TempLine = new XYChart.Series();
-        TempLine.setName ("Temperature");
+        TempLine.setName("Temperature");
         setColor(TemperatureChart, TempLine, 0);
 
         HumidLine = new XYChart.Series();
-        HumidLine.setName ("Humidity");
+        HumidLine.setName("Humidity");
         setColor(HumidChart, HumidLine, 1);
 
         PressLine = new XYChart.Series();
-        PressLine.setName ("Pressure");
+        PressLine.setName("Pressure");
         setColor(PressureChart, PressLine, 2);
 
         LightLine = new XYChart.Series();
-        LightLine.setName ("Light");
+        LightLine.setName("Light");
         setColor(LightChart, LightLine, 3);
 
 
         graphItButton.setOnAction(e -> {
-            if (draw)
-            {
+            if (draw) {
                 draw = false;
-            }
-            else
-            {
+            } else {
                 draw = true;
             }
         });
 
-        connectButton.setOnAction ( e -> {
-            if (connect)
-            {
+        connectButton.setOnAction(e -> {
+            if (connect) {
                 connect = false;
                 cleanAndFlush();
                 connectButton.setText("Connect");
-            }
-            else
-            {
+            } else {
                 connect = true;
                 connectButton.setText("Disconnect");
             }
         });
 
         lq = new LinkedBlockingQueue();
-        port = new SerialComm("COM3",lq);
+        port = new SerialComm("COM4", lq);
         port.addListener(this);
         sentRecently = true;
         ActionListener timer = new ActionListener() {
             @Override
-            public void actionPerformed(java.awt.event.ActionEvent e){
-                if(sentRecently) {
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+                if (sentRecently) {
                     connectText.setFill(Color.DARKGREEN);
                     connectText.setText("Connected");
                     sentRecently = false;
                     port.send('A');
-                }else {
+                } else {
+                    connectText.setFill(Color.FIREBRICK);
                     connectText.setText("Not Connected");
                 }
             }
@@ -153,17 +147,17 @@ public class Controller implements  Initializable, BufferReadyEvent {
         XYChart.Series temp3 = new XYChart.Series();
 
         switch (color) {
-            case 0 :{
+            case 0: {
                 drawChart(chart, s);
                 break;
             }
-            case 1 :{
+            case 1: {
                 drawChart(chart, temp1);
                 drawChart(chart, s);
                 chart.getData().remove(temp1);
                 break;
             }
-            case 2 :{
+            case 2: {
                 drawChart(chart, temp1);
                 drawChart(chart, temp2);
                 drawChart(chart, s);
@@ -171,7 +165,7 @@ public class Controller implements  Initializable, BufferReadyEvent {
                 chart.getData().remove(temp2);
                 break;
             }
-            case 3 :{
+            case 3: {
                 drawChart(chart, temp1);
                 drawChart(chart, temp2);
                 drawChart(chart, temp3);
@@ -181,80 +175,78 @@ public class Controller implements  Initializable, BufferReadyEvent {
                 chart.getData().remove(temp3);
                 break;
             }
-    }
+        }
 
     }
 
-    private void cleanAndFlush(){
+    private void cleanAndFlush() {
         try {
             port.port.purgePort(SerialPort.PURGE_RXCLEAR);
             port.port.purgePort(SerialPort.PURGE_TXCLEAR);
-        }
-        catch (SerialPortException e) {
+        } catch (SerialPortException e) {
             e.printStackTrace();
         }
     }
 
     @Override
-    public void bufferReady(char request){
+    public void bufferReady(char request) {
         Packet data;
-        if (connect) {
-            if (!lq.isEmpty()) {
-                data = (Packet) lq.remove();
-                switch (request) {
-                    case 'T': {
-                        sentRecently = true;
-                        tempText.setText(data.temperature + "C");
-                        if (draw) {
+        if (!lq.isEmpty()) {
+            data = (Packet) lq.remove();
+            switch (request) {
+                case 'T': {
+                    sentRecently = true;
+                    tempText.setText(data.temperature + "C");
+                    if (draw) {
+                        getChartData(TempLine, time, data.temperature);
+                    }
+                    break;
+                }
+                case 'P': {
+                    sentRecently = true;
+                    pressText.setText((data.pressure / 100.0F) + "hPa");
+                    if (draw) {
+                        getChartData(TempLine, time, data.pressure);
+                    }
+                    break;
+                }
+                case 'L': {
+                    sentRecently = true;
+                    lightText.setText("Daytime/Nighttime");
+                    if (draw) {
+                        getChartData(TempLine, time, data.light);
+                    }
+                    break;
+                }
+                case 'H': {
+                    sentRecently = true;
+                    humidText.setText(data.humidity + "RH");
+                    if (draw) {
+                        getChartData(TempLine, time, data.humidity);
+                    }
+                    break;
+                }
+                case 'A': {
+                    sentRecently = true;
+                    tempText.setText(data.temperature + "F");
+                    pressText.setText((data.pressure) + "hPa");
+                    lightText.setText(data.light * 4 + "somethings");
+                    humidText.setText(data.humidity + "RH");
+                    if (draw) {
+                        while (!(lq.isEmpty())) {
                             getChartData(TempLine, time, data.temperature);
-                        }
-                        break;
-                    }
-                    case 'P': {
-                        sentRecently = true;
-                        pressText.setText((data.pressure / 100.0F) + "hPa");
-                        if (draw) {
-                            getChartData(TempLine, time, data.pressure);
-                        }
-                        break;
-                    }
-                    case 'L': {
-                        sentRecently = true;
-                        lightText.setText("Daytime/Nighttime");
-                        if (draw) {
-                            getChartData(TempLine, time, data.light);
-                        }
-                        break;
-                    }
-                    case 'H': {
-                        sentRecently = true;
-                        humidText.setText(data.humidity + "RH");
-                        if (draw) {
-                            getChartData(TempLine, time, data.humidity);
-                        }
-                        break;
-                    }
-                    case 'A': {
-                        sentRecently = true;
-                        tempText.setText(data.temperature + "F");
-                        pressText.setText((data.pressure) + "hPa");
-                        lightText.setText(data.light * 4 + "somethings");
-                        humidText.setText(data.humidity + "RH");
-                        if (draw) {
-                            while (!(lq.isEmpty())) {
-                                getChartData(TempLine, time, data.temperature);
-                                getChartData(PressLine, time, data.pressure);
-                                getChartData(HumidLine, time, data.humidity);
-                                getChartData(LightLine, time, data.light * 4);
-                                ++time;
-                                if (!(lq.isEmpty())) {
-                                    data = (Packet) lq.remove();
-                                }
+                            getChartData(PressLine, time, data.pressure);
+                            getChartData(HumidLine, time, data.humidity);
+                            getChartData(LightLine, time, data.light * 4);
+                            ++time;
+                            if (!(lq.isEmpty())) {
+                                data = (Packet) lq.remove();
                             }
                         }
                     }
                 }
             }
+
         }
     }
 }

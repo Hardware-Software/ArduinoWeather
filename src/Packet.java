@@ -5,9 +5,9 @@ public class Packet {
     short temperature;
     byte humidity;
     short pressure;
-    byte light;
+    short light;
     short timestamp;
-    Packet(short temp, byte hum, short press, byte lit, short tsp){
+    Packet(short temp, byte hum, short press, short lit, short tsp){
         temperature = temp;
         humidity = hum;
         pressure = press;
