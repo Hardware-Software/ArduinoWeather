@@ -1,5 +1,4 @@
 import jssc.*;
-
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
