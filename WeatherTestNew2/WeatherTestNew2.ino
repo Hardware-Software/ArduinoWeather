@@ -44,7 +44,9 @@ byte receivedChar;
 boolean messageArrived = false;
 volatile DataRecord dr;
 char volatile dataArr[sizeof(DataRecord)];
+unsigned long volatile counter; 
 void setup() {
+counter = millis();
 DataRecord dr;
 Serial.begin(9600);
 Serial.flush();
@@ -63,7 +65,9 @@ void serialEvent() {
     receivedChar = Serial.read();
     messageArrived = true;
   }
-    dr.temperature = (int) bme.readTemperature();
+    dr.timestamp = millis() - counter;
+    counter = dr.timestamp+counter;
+    dr.temperature = (int)((bme.readTemperature() * 1.8 + 32.0f) * 100);
     dr.humidity = (byte) bme.readHumidity();
     dr.pressure = (int) (bme.readPressure()/100.0);
     dr.light = (byte) analogRead(14)/4;

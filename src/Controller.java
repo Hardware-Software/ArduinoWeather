@@ -203,15 +203,15 @@ public class Controller implements  Initializable, BufferReadyEvent {
                 }
                 case 'A': {
                     sentRecently = true;
-                    tempText.setText(data.temperature + "C");
-                    pressText.setText((data.pressure/100.0F)+ "hPa");
-                    lightText.setText(data.light + "somethings");
+                    tempText.setText(data.temperature + "F");
+                    pressText.setText((data.pressure)+ "hPa");
+                    lightText.setText(data.light*4 + "somethings");
                     humidText.setText(data.humidity + "RH");
                     if (draw) {
                         getChartData(TempLine, time, data.temperature);
-                        getChartData(PressLine, time, data.pressure/100.0F);
+                        getChartData(PressLine, time, data.pressure);
                         getChartData(HumidLine, time, data.humidity);
-                        getChartData(LightLine, time, data.light);
+                        getChartData(LightLine, time, data.light*4);
                         ++time;
                     }
                 }

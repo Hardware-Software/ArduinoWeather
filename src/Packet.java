@@ -2,14 +2,16 @@
  * Created by Andrew_2 on 11/18/2016.
  */
 public class Packet {
-    float temperature;
-    float humidity;
-    int pressure;
-    short light;
-    Packet(float temp, float hum, int press, short lit){
+    short temperature;
+    byte humidity;
+    short pressure;
+    byte light;
+    short timestamp;
+    Packet(short temp, byte hum, short press, byte lit, short tsp){
         temperature = temp;
         humidity = hum;
         pressure = press;
         light = lit;
+        timestamp = tsp;
     }
 }

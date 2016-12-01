@@ -74,27 +74,28 @@ public class SerialComm implements SerialPortEventListener {
                     }
                 }else {
                     try {
-                        input = port.readBytes(14, 200);
+                        input = port.readBytes(8, 200);
                     }catch(SerialPortTimeoutException spte){
                         spte.printStackTrace();
                     }
-                    ByteBuffer temperature = ByteBuffer.wrap(input, 0, 4);
-                    ByteBuffer humidity = ByteBuffer.wrap(input, 4, 4);
-                    ByteBuffer pressure = ByteBuffer.wrap(input, 8, 4);
-                    ByteBuffer light = ByteBuffer.wrap(input,12,2);
+                    ByteBuffer temperature = ByteBuffer.wrap(input, 0, 2);
+                    ByteBuffer pressure = ByteBuffer.wrap(input, 2, 2);
+                    ByteBuffer humidity = ByteBuffer.wrap(input, 4, 1);
+                    ByteBuffer light = ByteBuffer.wrap(input,5,1);
+                    ByteBuffer timestamp = ByteBuffer.wrap(input,6,2);
                     temperature.order(ByteOrder.LITTLE_ENDIAN);
                     pressure.order(ByteOrder.LITTLE_ENDIAN);
-                    humidity.order(ByteOrder.LITTLE_ENDIAN);
-                    light.order(ByteOrder.LITTLE_ENDIAN);
-                    float tp = temperature.getFloat();
-                    int pr = pressure.getInt();
-                    float hm = humidity.getFloat();
-                    short lg = light.getShort();
-                    buffer.add(new Packet(tp,hm,pr,lg));
+                    timestamp.order(ByteOrder.LITTLE_ENDIAN);
+                    short tp = temperature.getShort();
+                    short pr = pressure.getShort();
+                    byte hm = humidity.get();
+                    byte lg = light.get();
+                    short tsp = timestamp.getShort();
+                    buffer.add(new Packet(tp,hm,pr,lg,tsp));
                     for(BufferReadyEvent evnt : listenerList){
                         evnt.bufferReady(mostRecentRequest);
                     }
-                    System.out.println(tp + "C " + hm + "% RH " + (pr / 100.0F) + " hPa " + lg +" somethings");
+                    System.out.println(tp + "F " + hm + "% RH " + pr + " hPa " + lg*4 +" somethings timestamp: " + tsp);
                 }
 
             } catch (SerialPortException ex) {
