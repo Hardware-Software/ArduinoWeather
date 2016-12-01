@@ -74,24 +74,27 @@ public class SerialComm implements SerialPortEventListener {
                     }
                 }else {
                     try {
-                        input = port.readBytes(12, 200);
+                        input = port.readBytes(14, 200);
                     }catch(SerialPortTimeoutException spte){
                         spte.printStackTrace();
                     }
                     ByteBuffer temperature = ByteBuffer.wrap(input, 0, 4);
                     ByteBuffer humidity = ByteBuffer.wrap(input, 4, 4);
                     ByteBuffer pressure = ByteBuffer.wrap(input, 8, 4);
+                    ByteBuffer light = ByteBuffer.wrap(input,12,2);
                     temperature.order(ByteOrder.LITTLE_ENDIAN);
                     pressure.order(ByteOrder.LITTLE_ENDIAN);
                     humidity.order(ByteOrder.LITTLE_ENDIAN);
+                    light.order(ByteOrder.LITTLE_ENDIAN);
                     float tp = temperature.getFloat();
                     int pr = pressure.getInt();
                     float hm = humidity.getFloat();
-                    buffer.add(new Packet(tp,hm,pr));
+                    short lg = light.getShort();
+                    buffer.add(new Packet(tp,hm,pr,lg));
                     for(BufferReadyEvent evnt : listenerList){
                         evnt.bufferReady(mostRecentRequest);
                     }
-                    System.out.println(tp + "C " + hm + "% RH " + (pr / 100.0F) + " hPa");
+                    System.out.println(tp + "C " + hm + "% RH " + (pr / 100.0F) + " hPa " + lg +" somethings");
                 }
 
             } catch (SerialPortException ex) {

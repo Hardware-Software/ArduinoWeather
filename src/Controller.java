@@ -49,7 +49,7 @@ public class Controller implements  Initializable, BufferReadyEvent {
 
     int time = 0;
 
-    boolean draw =true;
+    boolean draw = false;
 
     @FXML
     private Text tempText;
@@ -156,35 +156,35 @@ public class Controller implements  Initializable, BufferReadyEvent {
 
     @Override
     public void bufferReady(char request){
-        Packet data = new Packet(0,0,0);
+        Packet data;
         if(!lq.isEmpty()){
             data = (Packet)lq.remove();
             switch (request) {
                 case 'T':{
                     tempText.setText(data.temperature + "C");
                     if (draw) {
-                        getChartData(TempLine, data.time, data.temperature);
+                        getChartData(TempLine, time, data.temperature);
                     }
                     break;
                 }
                 case 'P':{
                     pressText.setText((data.pressure/100.0F)+ "hPa");
                     if (draw) {
-                        getChartData(TempLine, data.time, data.temperature);
+                        getChartData(TempLine, time, data.pressure);
                     }
                     break;
                 }
                 case 'L':{
                     lightText.setText("Daytime/Nighttime");
                     if (draw) {
-                        getChartData(TempLine, data.time, data.temperature);
+                        getChartData(TempLine, time, data.light);
                     }
                     break;
                 }
                 case 'H':{
                     humidText.setText(data.humidity + "RH");
                     if (draw) {
-                        getChartData(TempLine, data.time, data.temperature);
+                        getChartData(TempLine, time, data.humidity);
                     }
                     break;
                 }
@@ -195,9 +195,10 @@ public class Controller implements  Initializable, BufferReadyEvent {
                     humidText.setText(data.humidity + "RH");
                     if (draw) {
                         getChartData(TempLine, time, data.temperature);
-                        getChartData(TempLine, time, data.pressure);
-                        getChartData(TempLine, time, data.humidity);
-                        //getChartData(TempLine, time, data.light);
+                        getChartData(PressLine, time, data.pressure);
+                        getChartData(HumidLine, time, data.humidity);
+                        getChartData(LightLine, time, data.light);
+                        ++time;
                     }
                 }
             }

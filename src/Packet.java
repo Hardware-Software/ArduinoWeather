@@ -5,9 +5,11 @@ public class Packet {
     float temperature;
     float humidity;
     int pressure;
-    Packet(float temp, float hum, int press){
+    short light;
+    Packet(float temp, float hum, int press, short lit){
         temperature = temp;
         humidity = hum;
         pressure = press;
+        light = lit;
     }
 }
