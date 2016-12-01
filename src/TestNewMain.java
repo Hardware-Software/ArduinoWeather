@@ -91,7 +91,7 @@ public class TestNewMain extends Application implements BufferReadyEvent {
     private void getAll() {serialPort.send('A');}
     @Override
     public void bufferReady(char request){
-        Packet data = new Packet(0,0,0);
+        Packet data;
         if(!lq.isEmpty()){
             data = (Packet)lq.remove();
             switch (request) {
