@@ -46,6 +46,7 @@ volatile char dataArr[sizeof(DataRecord)];
 void setup() {
 DataRecord dr;
 Serial.begin(9600);
+Serial.flush();
 Serial.print("RTS");
 if(!bme.begin()){
   Serial.println("Can't communicate with sensor! Check the wiring!");

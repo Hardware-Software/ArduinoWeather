@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="c389b59c-84bc-48ba-8fd0-0f2d7cc18d20" name="Default" comment="Added new Arduino code, Fixed Packet class to contain light data.">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/WeatherTestNew/WeatherTestNew.ino" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/jssc.xml" afterPath="$PROJECT_DIR$/.idea/libraries/jssc.xml" />
+    <list default="true" id="c389b59c-84bc-48ba-8fd0-0f2d7cc18d20" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WeatherTestNew/WeatherTestNew.ino" afterPath="$PROJECT_DIR$/WeatherTestNew/WeatherTestNew.ino" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Controller.java" afterPath="$PROJECT_DIR$/src/Controller.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Packet.java" afterPath="$PROJECT_DIR$/src/Packet.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/SerialComm.java" afterPath="$PROJECT_DIR$/src/SerialComm.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/TestNewMain.java" afterPath="$PROJECT_DIR$/src/TestNewMain.java" />
     </list>
     <ignored path="SerialExperiments.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -81,8 +77,8 @@
       <file leaf-file-name="Controller.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Controller.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="811">
-              <caret line="199" column="66" selection-start-line="199" selection-start-column="66" selection-end-line="199" selection-end-column="66" />
+            <state relative-caret-position="967">
+              <caret line="202" column="17" selection-start-line="202" selection-start-column="17" selection-end-line="202" selection-end-column="17" />
               <folding />
             </state>
           </provider>
@@ -782,7 +778,7 @@
       <workItem from="1480461725063" duration="1343000" />
       <workItem from="1480527900233" duration="885000" />
       <workItem from="1480533586268" duration="642000" />
-      <workItem from="1480558710225" duration="820000" />
+      <workItem from="1480558710225" duration="1424000" />
     </task>
     <task id="LOCAL-00001" summary="Added better serial communication">
       <created>1479511456148</created>
@@ -840,11 +836,18 @@
       <option name="project" value="LOCAL" />
       <updated>1480461371255</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Added new Arduino code, Fixed Packet class to contain light data.">
+      <created>1480559559502</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1480559559502</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="53889000" />
+    <option name="totallyTimeSpent" value="54493000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-13" y="-13" width="3226" height="1746" extended-state="6" />
@@ -857,12 +860,12 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.22621565" sideWeight="0.50208336" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39087948" sideWeight="0.49791667" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.39087948" sideWeight="0.49791667" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3296417" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.4103125" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.4103125" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -1194,8 +1197,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Controller.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="811">
-          <caret line="199" column="66" selection-start-line="199" selection-start-column="66" selection-end-line="199" selection-end-column="66" />
+        <state relative-caret-position="967">
+          <caret line="202" column="17" selection-start-line="202" selection-start-column="17" selection-end-line="202" selection-end-column="17" />
           <folding />
         </state>
       </provider>

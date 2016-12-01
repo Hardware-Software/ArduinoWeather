@@ -195,7 +195,7 @@ public class Controller implements  Initializable, BufferReadyEvent {
                     humidText.setText(data.humidity + "RH");
                     if (draw) {
                         getChartData(TempLine, time, data.temperature);
-                        getChartData(PressLine, time, data.pressure);
+                        getChartData(PressLine, time, data.pressure/100.0F);
                         getChartData(HumidLine, time, data.humidity);
                         getChartData(LightLine, time, data.light);
                         ++time;
