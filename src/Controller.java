@@ -59,8 +59,11 @@ public class Controller implements  Initializable, BufferReadyEvent {
     private Text pressText;
     @FXML
     private Text lightText;
+    @FXML
+    private Text connectText;
     private LinkedBlockingQueue lq;
     private SerialComm port;
+    private boolean sentRecently;
     @Override
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
 
@@ -95,16 +98,22 @@ public class Controller implements  Initializable, BufferReadyEvent {
         lq = new LinkedBlockingQueue();
         port = new SerialComm("COM3",lq);
         port.addListener(this);
+        sentRecently = true;
         ActionListener timer = new ActionListener() {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent e){
-                port.send('A');
+                if(sentRecently) {
+                    connectText.setText("Connected");
+                    sentRecently = false;
+                    port.send('A');
+                }else {
+                    connectText.setText("Not Connected");
+                }
             }
         };
         Timer tm = new Timer(1000, timer);
         tm.setInitialDelay(3000);
         tm.start();
-
     }
 
     private void getChartData(XYChart.Series s, double time, double value) {
@@ -161,6 +170,7 @@ public class Controller implements  Initializable, BufferReadyEvent {
             data = (Packet)lq.remove();
             switch (request) {
                 case 'T':{
+                    sentRecently = true;
                     tempText.setText(data.temperature + "C");
                     if (draw) {
                         getChartData(TempLine, time, data.temperature);
@@ -168,6 +178,7 @@ public class Controller implements  Initializable, BufferReadyEvent {
                     break;
                 }
                 case 'P':{
+                    sentRecently = true;
                     pressText.setText((data.pressure/100.0F)+ "hPa");
                     if (draw) {
                         getChartData(TempLine, time, data.pressure);
@@ -175,6 +186,7 @@ public class Controller implements  Initializable, BufferReadyEvent {
                     break;
                 }
                 case 'L':{
+                    sentRecently = true;
                     lightText.setText("Daytime/Nighttime");
                     if (draw) {
                         getChartData(TempLine, time, data.light);
@@ -182,6 +194,7 @@ public class Controller implements  Initializable, BufferReadyEvent {
                     break;
                 }
                 case 'H':{
+                    sentRecently = true;
                     humidText.setText(data.humidity + "RH");
                     if (draw) {
                         getChartData(TempLine, time, data.humidity);
@@ -189,9 +202,10 @@ public class Controller implements  Initializable, BufferReadyEvent {
                     break;
                 }
                 case 'A': {
+                    sentRecently = true;
                     tempText.setText(data.temperature + "C");
                     pressText.setText((data.pressure/100.0F)+ "hPa");
-                    lightText.setText("Daytime/Nighttime");
+                    lightText.setText(data.light + "somethings");
                     humidText.setText(data.humidity + "RH");
                     if (draw) {
                         getChartData(TempLine, time, data.temperature);
