@@ -55,7 +55,7 @@ int usedRecords;  //# of DataRecords in the dataList
 DataRecord dataList[MAX_RECORDS]; //measured data
 unsigned long lastMeasureTime;
 unsigned long rightNow;
-int dataTick; //time between measurements TODO: milliseconds or seconds?
+int volatile dataTick; //time between measurements TODO: milliseconds or seconds?
 
 //Expected minimums and maximums for data, NOT HARD LIMITS, just rescales the spaces for valuing these things
 #define MIN_TEMPERATURE -2000.0
@@ -86,7 +86,7 @@ void setup() {
 void loop() {
   // Do other logging stuff here
   rightNow = millis();
-  if(rightNow - lastMeasureTime >= 5000){
+  if(rightNow - lastMeasureTime >= 60000){
     lastMeasureTime = rightNow;
     digitalWrite(13,HIGH);
     if(usedRecords < MAX_RECORDS){
@@ -94,7 +94,9 @@ void loop() {
       dataList[usedRecords].humidity = (byte) bme.readHumidity();
       dataList[usedRecords].pressure = (int) (bme.readPressure()/100.0);
       dataList[usedRecords].light = (byte) analogRead(14)/4;
-      usedRecords++;
+      dataList[usedRecords].timeStamp = dataTick; 
+      ++dataTick;
+      ++usedRecords;
     }else{
       cullRecord();
     }
@@ -126,9 +128,11 @@ void serialEvent() {
         dr.humidity = (byte) bme.readHumidity();
         dr.pressure = (int) (bme.readPressure()/100.0);
         dr.light = (byte) analogRead(14)/4;
+        dr.timeStamp = dataTick;
         memcpy((void*)(&dataArr),(void*)(&dr),sizeof(DataRecord));
         Serial.write((uint8_t *)&dataArr,sizeof(DataRecord));
         messageArrived = false;
+        ++dataTick;
       }
     }
 }
