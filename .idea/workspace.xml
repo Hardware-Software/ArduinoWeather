@@ -3,8 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="c389b59c-84bc-48ba-8fd0-0f2d7cc18d20" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Controller.java" afterPath="$PROJECT_DIR$/src/Controller.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/SerialComm.java" afterPath="$PROJECT_DIR$/src/SerialComm.java" />
     </list>
     <ignored path="SerialExperiments.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -29,7 +27,7 @@
       <file leaf-file-name="SerialComm.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/SerialComm.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-453">
+            <state relative-caret-position="2979">
               <caret line="81" column="51" selection-start-line="81" selection-start-column="51" selection-end-line="81" selection-end-column="51" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -41,8 +39,8 @@
       <file leaf-file-name="WeatherTestMultiplePackets.ino" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/WeatherTestMultiplePackets/WeatherTestMultiplePackets.ino">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3328">
-              <caret line="109" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="46" selection-end-column="0" />
+            <state relative-caret-position="3536">
+              <caret line="113" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="46" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -337,7 +335,6 @@
           <option name="mySupportsDeletion" value="false" />
           <option name="myCanBeAbsent" value="false" />
           <option name="myId" value="UPDATED" />
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/.idea/workspace.xml</PATH>
           <PATH vcs="Git" revision="">$PROJECT_DIR$/WeatherTestMultiplePackets/WeatherTestMultiplePackets.ino</PATH>
         </FILE-GROUP>
         <FILE-GROUP>
@@ -934,7 +931,7 @@
       <workItem from="1480558710225" duration="2283000" />
       <workItem from="1480621623618" duration="918000" />
       <workItem from="1480627623537" duration="12467000" />
-      <workItem from="1480650674461" duration="5563000" />
+      <workItem from="1480650674461" duration="5665000" />
     </task>
     <task id="LOCAL-00001" summary="Added better serial communication">
       <created>1479511456148</created>
@@ -1020,11 +1017,18 @@
       <option name="project" value="LOCAL" />
       <updated>1480712149845</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="Port now purges on connection, instead of at close.">
+      <created>1480715396443</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1480715396443</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="74300000" />
+    <option name="totallyTimeSpent" value="74402000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-13" y="-13" width="3226" height="1746" extended-state="6" />
@@ -1037,8 +1041,8 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.22621565" sideWeight="0.50208336" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.4169381" sideWeight="0.49791667" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3296417" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4169381" sideWeight="0.49791667" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3296417" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -1111,7 +1115,8 @@
     <MESSAGE value="Modified Controller class, modified Arduino code to fix serial buffer problem." />
     <MESSAGE value="Added new Arduino code and Mountain Dew GUI" />
     <MESSAGE value="Added support for multiple packet receiving." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added support for multiple packet receiving." />
+    <MESSAGE value="Port now purges on connection, instead of at close." />
+    <option name="LAST_COMMIT_MESSAGE" value="Port now purges on connection, instead of at close." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1365,8 +1370,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/WeatherTestMultiplePackets/WeatherTestMultiplePackets.ino">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3328">
-          <caret line="109" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="46" selection-end-column="0" />
+        <state relative-caret-position="3536">
+          <caret line="113" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="46" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -1395,7 +1400,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/SerialComm.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-453">
+        <state relative-caret-position="2979">
           <caret line="81" column="51" selection-start-line="81" selection-start-column="51" selection-end-line="81" selection-end-column="51" />
           <folding>
             <element signature="imports" expanded="true" />
