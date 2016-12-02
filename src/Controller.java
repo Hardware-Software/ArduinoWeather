@@ -71,7 +71,6 @@ public class Controller implements Initializable, BufferReadyEvent {
     private LinkedBlockingQueue lq;
     private SerialComm port;
     private boolean sentRecently;
-
     @Override
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
 
@@ -107,10 +106,11 @@ public class Controller implements Initializable, BufferReadyEvent {
         connectButton.setOnAction(e -> {
             if (connect) {
                 connect = false;
-                cleanAndFlush();
+                //cleanAndFlush();
                 connectButton.setText("Connect");
             } else {
                 connect = true;
+                //openPort();
                 connectButton.setText("Disconnect");
             }
         });
@@ -188,9 +188,13 @@ public class Controller implements Initializable, BufferReadyEvent {
         try {
             port.port.purgePort(SerialPort.PURGE_RXCLEAR);
             port.port.purgePort(SerialPort.PURGE_TXCLEAR);
+            port.port.closePort();
         } catch (SerialPortException e) {
             e.printStackTrace();
         }
+    }
+    private void openPort() {
+        port.connect("COM6");
     }
 
     @Override
@@ -244,13 +248,14 @@ public class Controller implements Initializable, BufferReadyEvent {
                             final short pressure = data.pressure;
                             final byte humidity = data.humidity;
                             final short light = data.light;
+                            final short timestamp = data.timestamp;
                             Platform.runLater(new Runnable() {
                                 @Override
                                 public void run() {
-                                    getChartData(TempLine, time, temperature);
-                                    getChartData(PressLine, time, pressure);
-                                    getChartData(HumidLine, time, humidity);
-                                    getChartData(LightLine, time, light);
+                                    getChartData(TempLine, timestamp, temperature);
+                                    getChartData(PressLine, timestamp, pressure);
+                                    getChartData(HumidLine, timestamp, humidity);
+                                    getChartData(LightLine, timestamp, light);
                                 }
                             });
                             ++time;

@@ -41,6 +41,8 @@ public class SerialComm implements SerialPortEventListener {
             port.setFlowControlMode(SerialPort.FLOWCONTROL_RTSCTS_IN | SerialPort.FLOWCONTROL_RTSCTS_OUT);
             port.addEventListener(this, SerialPort.MASK_RXCHAR);
             dataList = new ArrayList<>();
+            port.purgePort(SerialPort.PURGE_RXCLEAR);
+            port.purgePort(SerialPort.PURGE_TXCLEAR);
         } catch (SerialPortException e) {
             System.out.println("Error: Serial port is not available.");
         }
