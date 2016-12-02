@@ -6,6 +6,7 @@ import java.util.ResourceBundle;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import javafx.application.Platform;
 import javafx.event.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -76,18 +77,22 @@ public class Controller implements Initializable, BufferReadyEvent {
 
         TempLine = new XYChart.Series();
         TempLine.setName("Temperature");
+        TemperatureChart.setAnimated(false);
         setColor(TemperatureChart, TempLine, 0);
 
         HumidLine = new XYChart.Series();
         HumidLine.setName("Humidity");
+        HumidChart.setAnimated(false);
         setColor(HumidChart, HumidLine, 1);
 
         PressLine = new XYChart.Series();
         PressLine.setName("Pressure");
+        PressureChart.setAnimated(false);
         setColor(PressureChart, PressLine, 2);
 
         LightLine = new XYChart.Series();
         LightLine.setName("Light");
+        LightChart.setAnimated(false);
         setColor(LightChart, LightLine, 3);
 
 
@@ -111,7 +116,7 @@ public class Controller implements Initializable, BufferReadyEvent {
         });
 
         lq = new LinkedBlockingQueue();
-        port = new SerialComm("COM4", lq);
+        port = new SerialComm("COM6", lq);
         port.addListener(this);
         sentRecently = true;
         ActionListener timer = new ActionListener() {
@@ -192,7 +197,7 @@ public class Controller implements Initializable, BufferReadyEvent {
     public void bufferReady(char request) {
         Packet data;
         if (!lq.isEmpty()) {
-            data = (Packet) lq.remove();
+            data = (Packet) lq.peek();
             switch (request) {
                 case 'T': {
                     sentRecently = true;
@@ -234,14 +239,21 @@ public class Controller implements Initializable, BufferReadyEvent {
                     humidText.setText(data.humidity + "RH");
                     if (draw) {
                         while (!(lq.isEmpty())) {
-                            getChartData(TempLine, time, data.temperature);
-                            getChartData(PressLine, time, data.pressure);
-                            getChartData(HumidLine, time, data.humidity);
-                            getChartData(LightLine, time, data.light * 4);
+                            data = (Packet) lq.remove();
+                            final short temperature = data.temperature;
+                            final short pressure = data.pressure;
+                            final byte humidity = data.humidity;
+                            final short light = data.light;
+                            Platform.runLater(new Runnable() {
+                                @Override
+                                public void run() {
+                                    getChartData(TempLine, time, temperature);
+                                    getChartData(PressLine, time, pressure);
+                                    getChartData(HumidLine, time, humidity);
+                                    getChartData(LightLine, time, light);
+                                }
+                            });
                             ++time;
-                            if (!(lq.isEmpty())) {
-                                data = (Packet) lq.remove();
-                            }
                         }
                     }
                 }

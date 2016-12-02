@@ -77,7 +77,7 @@ public class SerialComm implements SerialPortEventListener {
                     System.out.println("Number of packets: " + (size / 8));
 
                     //TODO: Put it in a loop.
-                    for (int i = 0; i < (size / 8); ++i) {
+                    for (int i = 0; i < size; ++i) {
                         try {
                             input = port.readBytes(8, 200);
                         } catch (SerialPortTimeoutException spe) {
@@ -94,10 +94,10 @@ public class SerialComm implements SerialPortEventListener {
                         short tp = temperature.getShort();
                         short pr = pressure.getShort();
                         byte hm = humidity.get();
-                        short lg = light.get();
+                        short lg = (short)light.get();
                         short tsp = timestamp.getShort();
                         buffer.add(new Packet(tp, hm, pr, lg, tsp));
-                        System.out.println(tp + "F " + hm + "% RH " + pr + " hPa " + lg * 4 + " somethings timestamp: " + tsp);
+                        System.out.println(tp + "F " + hm + "% RH " + pr + " hPa " + lg*8 + " somethings timestamp: " + tsp);
                     }
                     for (BufferReadyEvent evnt : listenerList) {
                         evnt.bufferReady(mostRecentRequest);
