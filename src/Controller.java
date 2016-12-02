@@ -71,6 +71,8 @@ public class Controller implements Initializable, BufferReadyEvent {
     private LinkedBlockingQueue lq;
     private SerialComm port;
     private boolean sentRecently;
+    private boolean initialConnect;
+
     @Override
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
 
@@ -119,6 +121,7 @@ public class Controller implements Initializable, BufferReadyEvent {
         port = new SerialComm("COM6", lq);
         port.addListener(this);
         sentRecently = true;
+        initialConnect = true; // We use this to request a complete data dump the first time we connect.
         ActionListener timer = new ActionListener() {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -126,7 +129,12 @@ public class Controller implements Initializable, BufferReadyEvent {
                     connectText.setFill(Color.DARKGREEN);
                     connectText.setText("Connected");
                     sentRecently = false;
-                    port.send('A');
+                    if (initialConnect) {
+                        initialConnect = false;
+                        port.send('C');
+                    } else {
+                        port.send('A');
+                    }
                 } else {
                     connectText.setFill(Color.FIREBRICK);
                     connectText.setText("Not Connected");
@@ -193,6 +201,7 @@ public class Controller implements Initializable, BufferReadyEvent {
             e.printStackTrace();
         }
     }
+
     private void openPort() {
         port.connect("COM6");
     }
@@ -202,67 +211,32 @@ public class Controller implements Initializable, BufferReadyEvent {
         Packet data;
         if (!lq.isEmpty()) {
             data = (Packet) lq.peek();
-            switch (request) {
-                case 'T': {
-                    sentRecently = true;
-                    tempText.setText(data.temperature + "C");
-                    if (draw) {
-                        getChartData(TempLine, time, data.temperature);
-                    }
-                    break;
-                }
-                case 'P': {
-                    sentRecently = true;
-                    pressText.setText((data.pressure / 100.0F) + "hPa");
-                    if (draw) {
-                        getChartData(TempLine, time, data.pressure);
-                    }
-                    break;
-                }
-                case 'L': {
-                    sentRecently = true;
-                    lightText.setText("Daytime/Nighttime");
-                    if (draw) {
-                        getChartData(TempLine, time, data.light);
-                    }
-                    break;
-                }
-                case 'H': {
-                    sentRecently = true;
-                    humidText.setText(data.humidity + "RH");
-                    if (draw) {
-                        getChartData(TempLine, time, data.humidity);
-                    }
-                    break;
-                }
-                case 'A': {
-                    sentRecently = true;
-                    tempText.setText(data.temperature + "F");
-                    pressText.setText((data.pressure) + "hPa");
-                    lightText.setText(data.light * 4 + "somethings");
-                    humidText.setText(data.humidity + "RH");
-                    if (draw) {
-                        while (!(lq.isEmpty())) {
-                            data = (Packet) lq.remove();
-                            final short temperature = data.temperature;
-                            final short pressure = data.pressure;
-                            final byte humidity = data.humidity;
-                            final short light = data.light;
-                            final short timestamp = data.timestamp;
-                            Platform.runLater(new Runnable() {
-                                @Override
-                                public void run() {
-                                    getChartData(TempLine, timestamp, temperature);
-                                    getChartData(PressLine, timestamp, pressure);
-                                    getChartData(HumidLine, timestamp, humidity);
-                                    getChartData(LightLine, timestamp, light);
-                                }
-                            });
-                            ++time;
+            sentRecently = true;
+            tempText.setText(data.temperature + "F");
+            pressText.setText((data.pressure) + "hPa");
+            lightText.setText(data.light * 4 + "somethings");
+            humidText.setText(data.humidity + "RH");
+            if (draw) {
+                while (!(lq.isEmpty())) {
+                    data = (Packet) lq.remove();
+                    final short temperature = data.temperature;
+                    final short pressure = data.pressure;
+                    final byte humidity = data.humidity;
+                    final short light = data.light;
+                    final short timestamp = data.timestamp;
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            getChartData(TempLine, timestamp, temperature);
+                            getChartData(PressLine, timestamp, pressure);
+                            getChartData(HumidLine, timestamp, humidity);
+                            getChartData(LightLine, timestamp, light);
                         }
-                    }
+                    });
+                    ++time;
                 }
             }
+
 
         }
     }

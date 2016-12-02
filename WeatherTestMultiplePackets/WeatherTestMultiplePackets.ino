@@ -111,8 +111,7 @@ void serialEvent() {
   }
     // Send a normal data packet.
     if(receivedChar == 'A') {
-      if(firstTransmission){
-        firstTransmission=false;
+
       // Send a packet with all current data.
       Serial.write('D');
       Serial.write(usedRecords);
@@ -120,20 +119,19 @@ void serialEvent() {
          memcpy((void*)(&dataArr),(void*)(&dataList[i]),sizeof(DataRecord));
          Serial.write((uint8_t *)&dataArr,sizeof(DataRecord));
       }
-      }else {
-        // Just send one packet.
-        Serial.write('D');
-        Serial.write(1);
-        dr.temperature = (int) bme.readTemperature();
-        dr.humidity = (byte) bme.readHumidity();
-        dr.pressure = (int) (bme.readPressure()/100.0);
-        dr.light = (byte) analogRead(14)/4;
-        dr.timeStamp = dataTick;
-        memcpy((void*)(&dataArr),(void*)(&dr),sizeof(DataRecord));
-        Serial.write((uint8_t *)&dataArr,sizeof(DataRecord));
-        messageArrived = false;
-        ++dataTick;
-      }
+    }else if(receivedChar == 'C'){
+      // Just send one packet.
+      Serial.write('D');
+      Serial.write(1);
+      dr.temperature = (int) bme.readTemperature();
+      dr.humidity = (byte) bme.readHumidity();
+      dr.pressure = (int) (bme.readPressure()/100.0);
+      dr.light = (byte) analogRead(14)/4;
+      dr.timeStamp = dataTick;
+      memcpy((void*)(&dataArr),(void*)(&dr),sizeof(DataRecord));
+      Serial.write((uint8_t *)&dataArr,sizeof(DataRecord));
+      messageArrived = false;
+      ++dataTick;
     }
 }
 

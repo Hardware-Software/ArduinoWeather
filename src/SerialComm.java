@@ -75,8 +75,8 @@ public class SerialComm implements SerialPortEventListener {
                 byte size = inputSize.get();
                 if (header == 'D') {
                     System.out.println("Valid packet received.");
-                    System.out.println("Packet Size: " + size + " bytes");
-                    System.out.println("Number of packets: " + (size / 8));
+                    System.out.println("Packet Size: " + size*8 + " bytes");
+                    System.out.println("Number of packets: " + size);
 
                     //TODO: Put it in a loop.
                     for (int i = 0; i < size; ++i) {
