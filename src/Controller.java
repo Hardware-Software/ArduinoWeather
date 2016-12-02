@@ -131,9 +131,9 @@ public class Controller implements Initializable, BufferReadyEvent {
                     sentRecently = false;
                     if (initialConnect) {
                         initialConnect = false;
-                        port.send('C');
-                    } else {
                         port.send('A');
+                    } else {
+                        port.send('C');
                     }
                 } else {
                     connectText.setFill(Color.FIREBRICK);
