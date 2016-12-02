@@ -56,14 +56,14 @@ DataRecord dataList[MAX_RECORDS]; //measured data
 int dataTick; //time between measurements TODO: milliseconds or seconds?
 
 //Expected minimums and maximums for data, NOT HARD LIMITS, just rescales the spaces for valuing these things
-#define MIN_TEMPERATURE -2000f
-#define MAX_TEMPERATURE 10000f
-#define MIN_PRESSURE 900f
-#define MAX_PRESSURE 1150f
-#define MIN_HUMIDUTY 0f
-#define MAX_HUMIDUTY 100f
-#define MIN_LIGHT 0f
-#define MAX_LIGHT 256f
+#define MIN_TEMPERATURE -2000.0
+#define MAX_TEMPERATURE 10000.0
+#define MIN_PRESSURE 900.0
+#define MAX_PRESSURE 1150.0
+#define MIN_HUMIDITY 0.0
+#define MAX_HUMIDITY 100.0
+#define MIN_LIGHT 0.0
+#define MAX_LIGHT 256.0
 
 
 void setup() {
@@ -115,9 +115,10 @@ float deLerp(float a, float b, float c) {
 
 void cullRecord() {
   int minI = -1;
-  float minValue = 1729f;
+  float minValue = 1729;
   for (int i = 1; i < usedRecords-1; ++i) {
-    float betwixt = deLerp((float)dataList[i-1], (float)dataList[i+1], (float)dataList[i]);
+    float betwixt = deLerp((float)dataList[i-1].timeStamp, (float)dataList[i+1].timeStamp, (float)dataList[i].timeStamp);
+    
     float tValue = deLerp(MIN_TEMPERATURE, MAX_TEMPERATURE, lerp((float)dataList[i-1].temperature, (float)dataList[i+1].temperature, betwixt));
     tValue += deLerp(MIN_TEMPERATURE, MAX_TEMPERATURE, (float)dataList[i].temperature);
     float pValue = deLerp(MIN_PRESSURE, MAX_PRESSURE, lerp((float)dataList[i-1].pressure, (float)dataList[i+1].pressure, betwixt));
@@ -127,14 +128,14 @@ void cullRecord() {
     float lValue = deLerp(MIN_LIGHT, MAX_LIGHT, lerp((float)dataList[i-1].light, (float)dataList[i+1].light, betwixt));
     hValue += deLerp(MIN_LIGHT, MAX_LIGHT, (float)dataList[i].light);
 
-    float value = tValue * tValue + pValue * pValue + hValue * hValue + lValue * lValue
+    float value = tValue * tValue + pValue * pValue + hValue * hValue + lValue * lValue;
     if (value < minValue) {
       minValue = value;
       minI = i;
     }
   }
 
-  for (int i = nearestI; i < usedRecords - 1; ++i) {
+  for (int i = minI; i < usedRecords - 1; ++i) {
     dataList[i] = dataList[i+1];
   }
 
