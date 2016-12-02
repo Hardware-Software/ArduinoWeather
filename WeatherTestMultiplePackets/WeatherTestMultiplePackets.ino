@@ -36,7 +36,7 @@ struct datarec {
   int pressure; //2 bytes, hPa
   byte humidity;  //1 byte, %saturation
   byte light; //1 byte, 4 Rendens
-  int timestamp;  //number of measurement ticks since start of data
+  int timeStamp;  //number of measurement ticks since start of data
 };
 typedef struct datarec DataRecord;
 
@@ -54,6 +54,17 @@ int usedRecords;  //# of DataRecords in the dataList
 DataRecord dataList[MAX_RECORDS]; //measured data
 
 int dataTick; //time between measurements TODO: milliseconds or seconds?
+
+//Expected minimums and maximums for data, NOT HARD LIMITS, just rescales the spaces for valuing these things
+#define MIN_TEMPERATURE -2000f
+#define MAX_TEMPERATURE 10000f
+#define MIN_PRESSURE 900f
+#define MAX_PRESSURE 1150f
+#define MIN_HUMIDUTY 0f
+#define MAX_HUMIDUTY 100f
+#define MIN_LIGHT 0f
+#define MAX_LIGHT 256f
+
 
 void setup() {
   DataRecord dr;
@@ -85,3 +96,47 @@ void serialEvent() {
     messageArrived = false;
 }
 
+void measure(DataRecord *dr) {
+  dr->temperature = (int)((bme.readTemperature() * 1.8 + 32.0f) * 100);
+  dr->humidity = (byte)bme.readHumidity();
+  dr->pressure = (int)bme.readPressure();
+  dr->light = 0;//TODO: (byte)light.getShort() / 4;
+  dr->timeStamp = 0;
+}
+
+//linear interpolation
+float lerp(float a, float b, float x) {
+  return a + (b - a) * x;
+}
+
+float deLerp(float a, float b, float c) {
+  return (c-a)/(b-a);
+}
+
+void cullRecord() {
+  int minI = -1;
+  float minValue = 1729f;
+  for (int i = 1; i < usedRecords-1; ++i) {
+    float betwixt = deLerp((float)dataList[i-1], (float)dataList[i+1], (float)dataList[i]);
+    float tValue = deLerp(MIN_TEMPERATURE, MAX_TEMPERATURE, lerp((float)dataList[i-1].temperature, (float)dataList[i+1].temperature, betwixt));
+    tValue += deLerp(MIN_TEMPERATURE, MAX_TEMPERATURE, (float)dataList[i].temperature);
+    float pValue = deLerp(MIN_PRESSURE, MAX_PRESSURE, lerp((float)dataList[i-1].pressure, (float)dataList[i+1].pressure, betwixt));
+    pValue += deLerp(MIN_PRESSURE, MAX_PRESSURE, (float)dataList[i].pressure);
+    float hValue = deLerp(MIN_HUMIDITY, MAX_HUMIDITY, lerp((float)dataList[i-1].humidity, (float)dataList[i+1].humidity, betwixt));
+    hValue += deLerp(MIN_HUMIDITY, MAX_HUMIDITY, (float)dataList[i].humidity);
+    float lValue = deLerp(MIN_LIGHT, MAX_LIGHT, lerp((float)dataList[i-1].light, (float)dataList[i+1].light, betwixt));
+    hValue += deLerp(MIN_LIGHT, MAX_LIGHT, (float)dataList[i].light);
+
+    float value = tValue * tValue + pValue * pValue + hValue * hValue + lValue * lValue
+    if (value < minValue) {
+      minValue = value;
+      minI = i;
+    }
+  }
+
+  for (int i = nearestI; i < usedRecords - 1; ++i) {
+    dataList[i] = dataList[i+1];
+  }
+
+  --usedRecords;
+}
