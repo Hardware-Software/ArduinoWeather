@@ -32,26 +32,37 @@ Adafruit_BME280 bme; // I2C
 //Adafruit_BME280 bme(BME_CS); // hardware SPI
 //Adafruit_BME280 bme(BME_CS, BME_MOSI, BME_MISO,  BME_SCK);
 struct datarec {
-  int temperature;
-  int pressure;
-  byte humidity;
-  byte light;
-  int timestamp;
+  int temperature;  //2 bytes, centiFahrenheit
+  int pressure; //2 bytes, hPa
+  byte humidity;  //1 byte, %saturation
+  byte light; //1 byte, 4 Rendens
+  int timestamp;  //number of measurement ticks since start of data
 };
 typedef struct datarec DataRecord;
+
+//Data sending stuff
 int data;
 byte receivedChar;
 boolean messageArrived = false;
 volatile DataRecord dr;
 char volatile dataArr[sizeof(DataRecord)];
+
+//Data managing stuff
+#define MAX_RECORDS 100 //size of the dataList
+#define CULL_COUNT 30 //number of records that will be culled when the dataList runs out of space
+int usedRecords;  //# of DataRecords in the dataList
+DataRecord dataList[MAX_RECORDS]; //measured data
+
+int dataTick; //time between measurements TODO: milliseconds or seconds?
+
 void setup() {
-DataRecord dr;
-Serial.begin(9600);
-Serial.flush();
-Serial.print("RTS");
-if(!bme.begin()){
-  Serial.println("Can't communicate with sensor! Check the wiring!");
-}
+  DataRecord dr;
+  Serial.begin(9600);
+  Serial.flush();
+  Serial.print("RTS");
+  if(!bme.begin()){
+    Serial.println("Can't communicate with sensor! Check the wiring!");
+  }
 }
 
 void loop() {
