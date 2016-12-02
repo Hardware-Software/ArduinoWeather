@@ -44,6 +44,7 @@ typedef struct datarec DataRecord;
 int data;
 byte receivedChar;
 boolean messageArrived = false;
+boolean firstTransmission;
 volatile DataRecord dr;
 char volatile dataArr[sizeof(DataRecord)];
 
@@ -52,7 +53,8 @@ char volatile dataArr[sizeof(DataRecord)];
 #define CULL_COUNT 30 //number of records that will be culled when the dataList runs out of space
 int usedRecords;  //# of DataRecords in the dataList
 DataRecord dataList[MAX_RECORDS]; //measured data
-
+unsigned long lastMeasureTime;
+unsigned long rightNow;
 int dataTick; //time between measurements TODO: milliseconds or seconds?
 
 //Expected minimums and maximums for data, NOT HARD LIMITS, just rescales the spaces for valuing these things
@@ -67,6 +69,11 @@ int dataTick; //time between measurements TODO: milliseconds or seconds?
 
 
 void setup() {
+  firstTransmission = true;
+  pinMode(13,OUTPUT);
+  dataTick = 0; // Assuming seconds for now, since we don't really need millis accuracy.
+  usedRecords = 0; // Initialize to zero records.
+  lastMeasureTime = millis();
   DataRecord dr;
   Serial.begin(9600);
   Serial.flush();
@@ -78,22 +85,52 @@ void setup() {
 
 void loop() {
   // Do other logging stuff here
-  delay(1000);
+  rightNow = millis();
+  if(rightNow - lastMeasureTime >= 5000){
+    lastMeasureTime = rightNow;
+    digitalWrite(13,HIGH);
+    if(usedRecords < MAX_RECORDS){
+      dataList[usedRecords].temperature = (int) bme.readTemperature();
+      dataList[usedRecords].humidity = (byte) bme.readHumidity();
+      dataList[usedRecords].pressure = (int) (bme.readPressure()/100.0);
+      dataList[usedRecords].light = (byte) analogRead(14)/4;
+      usedRecords++;
+    }else{
+      cullRecord();
+    }
+  }else{
+    digitalWrite(13,LOW);
+  }
 }
 void serialEvent() {
   while(Serial.available()) {
     receivedChar = Serial.read();
     messageArrived = true;
   }
-    Serial.write('D');
-    Serial.write(8);
-    dr.temperature = (int) bme.readTemperature();
-    dr.humidity = (byte) bme.readHumidity();
-    dr.pressure = (int) (bme.readPressure()/100.0);
-    dr.light = (byte) analogRead(14)/4;
-    memcpy((void*)(&dataArr),(void*)(&dr),sizeof(DataRecord));
-    Serial.write((uint8_t *)&dataArr,sizeof(DataRecord));
-    messageArrived = false;
+    // Send a normal data packet.
+    if(receivedChar == 'A') {
+      if(firstTransmission){
+        firstTransmission=false;
+      // Send a packet with all current data.
+      Serial.write('D');
+      Serial.write(usedRecords);
+      for(int i = 0; i < usedRecords; ++i){
+         memcpy((void*)(&dataArr),(void*)(&dataList[i]),sizeof(DataRecord));
+         Serial.write((uint8_t *)&dataArr,sizeof(DataRecord));
+      }
+      }else {
+        // Just send one packet.
+        Serial.write('D');
+        Serial.write(1);
+        dr.temperature = (int) bme.readTemperature();
+        dr.humidity = (byte) bme.readHumidity();
+        dr.pressure = (int) (bme.readPressure()/100.0);
+        dr.light = (byte) analogRead(14)/4;
+        memcpy((void*)(&dataArr),(void*)(&dr),sizeof(DataRecord));
+        Serial.write((uint8_t *)&dataArr,sizeof(DataRecord));
+        messageArrived = false;
+      }
+    }
 }
 
 void measure(DataRecord *dr) {
