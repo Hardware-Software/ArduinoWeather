@@ -83,7 +83,7 @@
       </ToolBar>
       <ToolBar prefHeight="40.0" prefWidth="200.0">
          <items>
-            <Button fx:id="connectButton" mnemonicParsing="false" text="Connect" />
+            <Button fx:id="connectButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="85.0" text="Connect" />
             <Text fx:id="connectText" fill="firebrick" strokeType="OUTSIDE" strokeWidth="0.0" text="Not Connected" textOrigin="CENTER" />
          </items>
       </ToolBar>
