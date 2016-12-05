@@ -144,6 +144,11 @@ public class Controller implements Initializable, BufferReadyEvent {
         Timer tm = new Timer(1000, timer);
         tm.setInitialDelay(3000);
         tm.start();
+
+        RateButton.setOnAction(e -> {
+            int newRate = Integer.parseInt(RateField.getText());
+            tm.setDelay(newRate*1000);
+        });
     }
 
     private void getChartData(XYChart.Series s, double time, double value) {
