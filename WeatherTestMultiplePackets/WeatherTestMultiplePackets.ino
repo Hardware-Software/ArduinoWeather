@@ -90,11 +90,7 @@ void loop() {
     lastMeasureTime = rightNow;
     digitalWrite(13,HIGH);
     if(usedRecords < MAX_RECORDS){
-      dataList[usedRecords].temperature = (int) bme.readTemperature();
-      dataList[usedRecords].humidity = (byte) bme.readHumidity();
-      dataList[usedRecords].pressure = (int) (bme.readPressure()/100.0);
-      dataList[usedRecords].light = (byte) analogRead(14)/4;
-      dataList[usedRecords].timeStamp = dataTick; 
+      measure(&dataList[usedRecords]);
       ++dataTick;
       ++usedRecords;
     }else{
@@ -125,11 +121,7 @@ void serialEvent() {
       // Just send one packet.
       Serial.write('D');
       Serial.write(1);
-      dr.temperature = (int) bme.readTemperature();
-      dr.humidity = (byte) bme.readHumidity();
-      dr.pressure = (int) (bme.readPressure()/100.0);
-      dr.light = (byte) analogRead(14)/4;
-      dr.timeStamp = dataTick;
+      measure(&dr);
       memcpy((void*)(&dataArr),(void*)(&dr),sizeof(DataRecord));
       Serial.write((uint8_t *)&dataArr,sizeof(DataRecord));
       messageArrived = false;
@@ -137,12 +129,13 @@ void serialEvent() {
     }
 }
 
-void measure(DataRecord *dr) {
-  dr->temperature = (int)((bme.readTemperature() * 1.8 + 32.0f) * 100);
+//reads measurement data into the specified DataRecord
+void measure(volatile DataRecord *dr) {
+  dr->temperature = (int) bme.readTemperature();
   dr->humidity = (byte)bme.readHumidity();
-  dr->pressure = (int)bme.readPressure();
-  dr->light = 0;//TODO: (byte)light.getShort() / 4;
-  dr->timeStamp = 0;
+  dr->pressure = (int) (bme.readPressure()/100.0);
+  dr->light = (byte) analogRead(14)/4;
+  dr->timeStamp = dataTick;
 }
 
 //linear interpolation
@@ -150,6 +143,7 @@ float lerp(float a, float b, float x) {
   return a + (b - a) * x;
 }
 
+//inverse of linear interpolation
 float deLerp(float a, float b, float c) {
   return (c-a)/(b-a);
 }
