@@ -55,7 +55,7 @@ int usedRecords;  //# of DataRecords in the dataList
 DataRecord dataList[MAX_RECORDS]; //measured data
 unsigned long lastMeasureTime;
 unsigned long rightNow;
-int volatile dataTick; //time between measurements TODO: milliseconds or seconds?
+int volatile dataTick; //time between measurements in seconds
 
 //Expected minimums and maximums for data, NOT HARD LIMITS, just rescales the spaces for valuing these things
 #define MIN_TEMPERATURE -2000.0
@@ -98,12 +98,14 @@ void loop() {
       ++dataTick;
       ++usedRecords;
     }else{
-      cullRecord();
+      for (int i = 0; i < CULL_COUNT; ++i)  //cull records after we've grabbed a bunch so we know which points are actually valuable
+        cullRecord();
     }
   }else{
     digitalWrite(13,LOW);
   }
 }
+
 void serialEvent() {
   while(Serial.available()) {
     receivedChar = Serial.read();
