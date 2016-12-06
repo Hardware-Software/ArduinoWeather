@@ -117,9 +117,7 @@ public class Controller implements Initializable, BufferReadyEvent {
             }
         });
 
-        lq = new LinkedBlockingQueue();
-        port = new SerialComm("COM6", lq);
-        port.addListener(this);
+
         sentRecently = true;
         initialConnect = true; // We use this to request a complete data dump the first time we connect.
         ActionListener timer = new ActionListener() {
@@ -141,6 +139,9 @@ public class Controller implements Initializable, BufferReadyEvent {
                 }
             }
         };
+        lq = new LinkedBlockingQueue();
+        port = new SerialComm("COM6", lq);
+        port.addListener(this);
         Timer tm = new Timer(1000, timer);
         tm.setInitialDelay(3000);
         tm.start();
@@ -214,12 +215,12 @@ public class Controller implements Initializable, BufferReadyEvent {
     @Override
     public void bufferReady(char request) {
         Packet data;
+        sentRecently = true;
         if (!lq.isEmpty()) {
             data = (Packet) lq.peek();
-            sentRecently = true;
-            tempText.setText(data.temperature + "F");
+            tempText.setText(data.temperature + "C");
             pressText.setText((data.pressure) + "hPa");
-            lightText.setText(data.light * 4 + "somethings");
+            lightText.setText(data.light + "Lux");
             humidText.setText(data.humidity + "RH");
             if (draw) {
                 while (!(lq.isEmpty())) {

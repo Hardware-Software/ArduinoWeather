@@ -49,13 +49,13 @@ public class SerialComm implements SerialPortEventListener {
     }
 
     public boolean send(char dataRequested) {
-            try {
-                port.writeByte((byte) dataRequested);
-            } catch (SerialPortException exc) {
-                exc.printStackTrace();
-            }
-            mostRecentRequest = dataRequested;
-            return true;
+        try {
+            port.writeByte((byte) dataRequested);
+        } catch (SerialPortException exc) {
+            exc.printStackTrace();
+        }
+        mostRecentRequest = dataRequested;
+        return true;
     }
 
     public void serialEvent(SerialPortEvent e) {
@@ -75,7 +75,7 @@ public class SerialComm implements SerialPortEventListener {
                 byte size = inputSize.get();
                 if (header == 'D') {
                     System.out.println("Valid packet received.");
-                    System.out.println("Packet Size: " + size*8 + " bytes");
+                    System.out.println("Packet Size: " + size * 8 + " bytes");
                     System.out.println("Number of packets: " + size);
 
                     //TODO: Put it in a loop.
@@ -96,10 +96,14 @@ public class SerialComm implements SerialPortEventListener {
                         short tp = temperature.getShort();
                         short pr = pressure.getShort();
                         byte hm = humidity.get();
-                        short lg = (short)light.get();
+                        short lg = light.get();
+                        System.out.println("Raw: " + lg);
+                        float temp = (((lg * 4) / 1024.0F) * 5.0F);
+                        temp = temp > 0 ? (((2500.0f / temp) - 500.0F) / (2.0F)) : 0.0F; // Don't ask
+                        lg = (short) temp;
                         short tsp = timestamp.getShort();
                         buffer.add(new Packet(tp, hm, pr, lg, tsp));
-                        System.out.println(tp + "F " + hm + "% RH " + pr + " hPa " + lg*8 + " somethings timestamp: " + tsp);
+                        System.out.println(tp + "F " + hm + "% RH " + pr + " hPa " + temp + " Lux timestamp: " + tsp);
                     }
                     for (BufferReadyEvent evnt : listenerList) {
                         evnt.bufferReady(mostRecentRequest);
