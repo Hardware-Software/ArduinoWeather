@@ -19,13 +19,11 @@
       <RowConstraints maxHeight="194.5" minHeight="10.0" percentHeight="5.0" prefHeight="24.5" vgrow="SOMETIMES" />
       <RowConstraints maxHeight="194.5" minHeight="10.0" percentHeight="5.0" prefHeight="88.5" vgrow="SOMETIMES" />
       <RowConstraints maxHeight="194.5" minHeight="10.0" percentHeight="5.0" prefHeight="88.5" vgrow="SOMETIMES" />
-    <RowConstraints maxHeight="194.5" minHeight="10.0" percentHeight="5.0" prefHeight="88.5" vgrow="SOMETIMES" />
-      <RowConstraints maxHeight="194.5" minHeight="10.0" percentHeight="5.0" prefHeight="88.5" vgrow="SOMETIMES" />
       <RowConstraints maxHeight="303.5" minHeight="10.0" percentHeight="42.5" prefHeight="293.0" vgrow="SOMETIMES" />
       <RowConstraints maxHeight="359.0" minHeight="10.0" percentHeight="42.5" prefHeight="255.5" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <LineChart id="TemperatureChart" fx:id="TemperatureChart" prefHeight="266.0" prefWidth="472.0" GridPane.rowIndex="5">
+      <LineChart id="TemperatureChart" fx:id="TemperatureChart" prefHeight="266.0" prefWidth="472.0" GridPane.rowIndex="3">
         <xAxis>
           <NumberAxis id="TempXAxis" fx:id="TempXAxis" side="BOTTOM" />
         </xAxis>
@@ -33,7 +31,7 @@
           <NumberAxis id="TempYAxis" fx:id="TempYAxis" side="LEFT" />
         </yAxis>
       </LineChart>
-       <LineChart id="HumidChart" fx:id="HumidChart" GridPane.columnIndex="1" GridPane.rowIndex="5">
+       <LineChart id="HumidChart" fx:id="HumidChart" GridPane.columnIndex="1" GridPane.rowIndex="3">
         <xAxis>
           <NumberAxis id="HumidXAxis" side="BOTTOM" />
         </xAxis>
@@ -41,7 +39,7 @@
           <NumberAxis id="HumidYAxis" side="LEFT" />
         </yAxis>
       </LineChart>
-      <LineChart id="PressureChart" fx:id="PressureChart" GridPane.rowIndex="6">
+      <LineChart id="PressureChart" fx:id="PressureChart" GridPane.rowIndex="4">
         <xAxis>
           <NumberAxis id="PressureXAxis" side="BOTTOM" />
         </xAxis>
@@ -49,7 +47,7 @@
           <NumberAxis id="PressureYAxis" side="LEFT" />
         </yAxis>
       </LineChart>
-      <LineChart id="LightChart" fx:id="LightChart" GridPane.columnIndex="1" GridPane.rowIndex="6">
+      <LineChart id="LightChart" fx:id="LightChart" GridPane.columnIndex="1" GridPane.rowIndex="4">
         <xAxis>
           <NumberAxis id="LightXAxis" side="BOTTOM" />
         </xAxis>
@@ -83,14 +81,9 @@
       </ToolBar>
       <ToolBar prefHeight="40.0" prefWidth="200.0">
          <items>
-            <Button fx:id="connectButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="85.0" text="Connect" />
+            <Button fx:id="connectButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="85.0" text="Pause"/>
             <Text fx:id="connectText" fill="firebrick" strokeType="OUTSIDE" strokeWidth="0.0" text="Not Connected" textOrigin="CENTER" />
          </items>
-      </ToolBar>
-      <ToolBar prefHeight="36.0" prefWidth="999.0" GridPane.columnSpan="2" GridPane.rowIndex="4">
-        <items>
-          <Button fx:id="graphItButton" mnemonicParsing="false" text="Graph Data" />
-        </items>
       </ToolBar>
       <ToolBar prefHeight="40.0" prefWidth="200.0" GridPane.columnIndex="1">
         <items>

@@ -54,9 +54,10 @@ public class Controller implements Initializable, BufferReadyEvent {
 
     int time = 0;
 
-    boolean draw = false;
+    boolean run = true;
 
     boolean connect = false;
+    boolean waitOnce = false;
 
     @FXML
     private Text tempText;
@@ -97,26 +98,15 @@ public class Controller implements Initializable, BufferReadyEvent {
         setColor(LightChart, LightLine, 3);
 
 
-        graphItButton.setOnAction(e -> {
-            if (draw) {
-                draw = false;
-            } else {
-                draw = true;
-            }
-        });
-
         connectButton.setOnAction(e -> {
-            if (connect) {
-                connect = false;
-                //cleanAndFlush();
-                connectButton.setText("Connect");
+            if (run) {
+                run = false;
+                connectButton.setText("Run");
             } else {
-                connect = true;
-                //openPort();
-                connectButton.setText("Disconnect");
+                run = true;
+                connectButton.setText("Pause");
             }
         });
-
 
         sentRecently = true;
         initialConnect = true; // We use this to request a complete data dump the first time we connect.
@@ -134,13 +124,17 @@ public class Controller implements Initializable, BufferReadyEvent {
                         port.send('C');
                     }
                 } else {
-                    connectText.setFill(Color.FIREBRICK);
-                    connectText.setText("Not Connected");
+                    if (!waitOnce) {
+                        waitOnce = true;
+                    } else {
+                        connectText.setFill(Color.FIREBRICK);
+                        connectText.setText("Not Connected");
+                    }
                 }
             }
         };
         lq = new LinkedBlockingQueue();
-        port = new SerialComm("COM6", lq);
+        port = new SerialComm("COM4", lq);
         port.addListener(this);
         Timer tm = new Timer(1000, timer);
         tm.setInitialDelay(3000);
@@ -148,7 +142,7 @@ public class Controller implements Initializable, BufferReadyEvent {
 
         RateButton.setOnAction(e -> {
             int newRate = Integer.parseInt(RateField.getText());
-            tm.setDelay(newRate*1000);
+            tm.setDelay(newRate * 1000);
         });
     }
 
@@ -218,11 +212,12 @@ public class Controller implements Initializable, BufferReadyEvent {
         sentRecently = true;
         if (!lq.isEmpty()) {
             data = (Packet) lq.peek();
-            tempText.setText(data.temperature + "C");
-            pressText.setText((data.pressure) + "hPa");
-            lightText.setText(data.light + "Lux");
-            humidText.setText(data.humidity + "RH");
-            if (draw) {
+            final Packet test = data;
+            tempText.setText(test.temperature + "C");
+            pressText.setText((test.pressure) + "hPa");
+            lightText.setText(test.light + "Lux");
+            humidText.setText(test.humidity + "RH");
+            if (run) {
                 while (!(lq.isEmpty())) {
                     data = (Packet) lq.remove();
                     final short temperature = data.temperature;

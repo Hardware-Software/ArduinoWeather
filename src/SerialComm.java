@@ -97,13 +97,13 @@ public class SerialComm implements SerialPortEventListener {
                         short pr = pressure.getShort();
                         byte hm = humidity.get();
                         short lg = light.get();
-                        System.out.println("Raw: " + lg);
-                        float temp = (((lg * 4) / 1024.0F) * 5.0F);
+                        System.out.println("Raw: " + (lg*4));
+                        float temp = (((256.0F - ((float)lg * 4.0f)) / 256.0F) * 5.0F);
                         temp = temp > 0 ? (((2500.0f / temp) - 500.0F) / (2.0F)) : 0.0F; // Don't ask
                         lg = (short) temp;
                         short tsp = timestamp.getShort();
                         buffer.add(new Packet(tp, hm, pr, lg, tsp));
-                        System.out.println(tp + "F " + hm + "% RH " + pr + " hPa " + temp + " Lux timestamp: " + tsp);
+                        System.out.println(tp + "C " + hm + "% RH " + pr + " hPa " + temp + " Lux timestamp: " + tsp);
                     }
                     for (BufferReadyEvent evnt : listenerList) {
                         evnt.bufferReady(mostRecentRequest);

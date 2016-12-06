@@ -86,7 +86,7 @@ void setup() {
 void loop() {
   // Do other logging stuff here
   rightNow = millis();
-  if(rightNow - lastMeasureTime >= 60000){
+  if(rightNow - lastMeasureTime >= 1000){
     lastMeasureTime = rightNow;
     digitalWrite(13,HIGH);
     if(usedRecords < MAX_RECORDS){
@@ -167,6 +167,7 @@ void cullRecord() {
     hValue += deLerp(MIN_LIGHT, MAX_LIGHT, (float)dataList[i].light);
 
     float value = tValue * tValue + pValue * pValue + hValue * hValue + lValue * lValue;  //4D eucidean length of the sum of the distances (total difference)
+    value = value * (float)(dataList[i+1].timeStamp - dataList[i-1].timeStamp);
     if (value < minValue) {
       minValue = value;
       minI = i;
