@@ -55,7 +55,7 @@ int usedRecords;  //# of DataRecords in the dataList
 DataRecord dataList[MAX_RECORDS]; //measured data
 unsigned long lastMeasureTime;
 unsigned long rightNow;
-int volatile dataTick; //time between measurements TODO: milliseconds or seconds?
+int volatile dataTick; //time between measurements in seconds
 
 //Expected minimums and maximums for data, NOT HARD LIMITS, just rescales the spaces for valuing these things
 #define MIN_TEMPERATURE -2000.0
@@ -90,20 +90,18 @@ void loop() {
     lastMeasureTime = rightNow;
     digitalWrite(13,HIGH);
     if(usedRecords < MAX_RECORDS){
-      dataList[usedRecords].temperature = (int) bme.readTemperature();
-      dataList[usedRecords].humidity = (byte) bme.readHumidity();
-      dataList[usedRecords].pressure = (int) (bme.readPressure()/100.0);
-      dataList[usedRecords].light = (byte) analogRead(14)/4;
-      dataList[usedRecords].timeStamp = dataTick; 
+      measure(&dataList[usedRecords]);
       ++dataTick;
       ++usedRecords;
     }else{
-      cullRecord();
+      for (int i = 0; i < CULL_COUNT; ++i)  //cull records after we've grabbed a bunch so we know which points are actually valuable
+        cullRecord();
     }
   }else{
     digitalWrite(13,LOW);
   }
 }
+
 void serialEvent() {
   while(Serial.available()) {
     receivedChar = Serial.read();
@@ -123,11 +121,7 @@ void serialEvent() {
       // Just send one packet.
       Serial.write('D');
       Serial.write(1);
-      dr.temperature = (int) bme.readTemperature();
-      dr.humidity = (byte) bme.readHumidity();
-      dr.pressure = (int) (bme.readPressure()/100.0);
-      dr.light = (byte) analogRead(14)/4;
-      dr.timeStamp = dataTick;
+      measure(&dr);
       memcpy((void*)(&dataArr),(void*)(&dr),sizeof(DataRecord));
       Serial.write((uint8_t *)&dataArr,sizeof(DataRecord));
       messageArrived = false;
@@ -135,12 +129,13 @@ void serialEvent() {
     }
 }
 
-void measure(DataRecord *dr) {
-  dr->temperature = (int)((bme.readTemperature() * 1.8 + 32.0f) * 100);
+//reads measurement data into the specified DataRecord
+void measure(volatile DataRecord *dr) {
+  dr->temperature = (int) bme.readTemperature();
   dr->humidity = (byte)bme.readHumidity();
-  dr->pressure = (int)bme.readPressure();
-  dr->light = 0;//TODO: (byte)light.getShort() / 4;
-  dr->timeStamp = 0;
+  dr->pressure = (int) (bme.readPressure()/100.0);
+  dr->light = (byte) analogRead(14)/4;
+  dr->timeStamp = dataTick;
 }
 
 //linear interpolation
@@ -148,18 +143,22 @@ float lerp(float a, float b, float x) {
   return a + (b - a) * x;
 }
 
+//inverse of linear interpolation
 float deLerp(float a, float b, float c) {
   return (c-a)/(b-a);
 }
 
+//this algorithm finds the least valuable record and deletes it.
+//a record is considered to be low value if it is very close to a a straight line between its next and previous records
+//The idea is to delete records that we'll be able to accurately guess later
 void cullRecord() {
-  int minI = -1;
-  float minValue = 1729;
+  int minI = -1;  //will be the index of the lowest value record
+  float minValue = 1729;  //initialize minimum found to arbitrary large number, will be the value of the lowest value record
   for (int i = 1; i < usedRecords-1; ++i) {
     float betwixt = deLerp((float)dataList[i-1].timeStamp, (float)dataList[i+1].timeStamp, (float)dataList[i].timeStamp);
     
-    float tValue = deLerp(MIN_TEMPERATURE, MAX_TEMPERATURE, lerp((float)dataList[i-1].temperature, (float)dataList[i+1].temperature, betwixt));
-    tValue += deLerp(MIN_TEMPERATURE, MAX_TEMPERATURE, (float)dataList[i].temperature);
+    float tValue = deLerp(MIN_TEMPERATURE, MAX_TEMPERATURE, lerp((float)dataList[i-1].temperature, (float)dataList[i+1].temperature, betwixt)); //find interpolated measurement
+    tValue += deLerp(MIN_TEMPERATURE, MAX_TEMPERATURE, (float)dataList[i].temperature);                                                         //subtract actual measurement to find difference
     float pValue = deLerp(MIN_PRESSURE, MAX_PRESSURE, lerp((float)dataList[i-1].pressure, (float)dataList[i+1].pressure, betwixt));
     pValue += deLerp(MIN_PRESSURE, MAX_PRESSURE, (float)dataList[i].pressure);
     float hValue = deLerp(MIN_HUMIDITY, MAX_HUMIDITY, lerp((float)dataList[i-1].humidity, (float)dataList[i+1].humidity, betwixt));
@@ -167,13 +166,14 @@ void cullRecord() {
     float lValue = deLerp(MIN_LIGHT, MAX_LIGHT, lerp((float)dataList[i-1].light, (float)dataList[i+1].light, betwixt));
     hValue += deLerp(MIN_LIGHT, MAX_LIGHT, (float)dataList[i].light);
 
-    float value = tValue * tValue + pValue * pValue + hValue * hValue + lValue * lValue;
+    float value = tValue * tValue + pValue * pValue + hValue * hValue + lValue * lValue;  //4D eucidean length of the sum of the distances (total difference)
     if (value < minValue) {
       minValue = value;
       minI = i;
     }
   }
 
+  //delete the lowest value record
   for (int i = minI; i < usedRecords - 1; ++i) {
     dataList[i] = dataList[i+1];
   }
