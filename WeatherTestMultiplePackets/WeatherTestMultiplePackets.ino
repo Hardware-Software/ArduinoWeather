@@ -66,6 +66,7 @@ int volatile dataTick; //time between measurements in seconds
 #define MAX_HUMIDITY 100.0
 #define MIN_LIGHT 0.0
 #define MAX_LIGHT 256.0
+#define TIMESTEP 1000
 
 
 void setup() {
@@ -75,8 +76,8 @@ void setup() {
   usedRecords = 0; // Initialize to zero records.
   lastMeasureTime = millis();
   DataRecord dr;
-  Serial.begin(9600);
   Serial.flush();
+  Serial.begin(9600);
   Serial.print("RTS");
   if(!bme.begin()){
     Serial.println("Can't communicate with sensor! Check the wiring!");
@@ -86,12 +87,11 @@ void setup() {
 void loop() {
   // Do other logging stuff here
   rightNow = millis();
-  if(rightNow - lastMeasureTime >= 1000){
-    lastMeasureTime = rightNow;
+  if(rightNow - lastMeasureTime >= TIMESTEP){
+    lastMeasureTime += TIMESTEP;
     digitalWrite(13,HIGH);
     if(usedRecords < MAX_RECORDS){
       measure(&dataList[usedRecords]);
-      ++dataTick;
       ++usedRecords;
     }else{
       for (int i = 0; i < CULL_COUNT; ++i)  //cull records after we've grabbed a bunch so we know which points are actually valuable
@@ -125,7 +125,6 @@ void serialEvent() {
       memcpy((void*)(&dataArr),(void*)(&dr),sizeof(DataRecord));
       Serial.write((uint8_t *)&dataArr,sizeof(DataRecord));
       messageArrived = false;
-      ++dataTick;
     }
 }
 
@@ -135,7 +134,7 @@ void measure(volatile DataRecord *dr) {
   dr->humidity = (byte)bme.readHumidity();
   dr->pressure = (int) (bme.readPressure()/100.0);
   dr->light = (byte) analogRead(14)/4;
-  dr->timeStamp = dataTick;
+  dr->timeStamp = millis()/TIMESTEP;
 }
 
 //linear interpolation
